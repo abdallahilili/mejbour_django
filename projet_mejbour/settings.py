@@ -42,17 +42,10 @@ INSTALLED_APPS = [
     'social_django', 
     'django.contrib.sites',
 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-
-    'crispy_forms',
-
 
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
 
 SITE_ID = 2
 
@@ -68,7 +61,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',  # Correction de la faute de frappe ici
 
-    'allauth.account.middleware.AccountMiddleware',
+
 ]
 
 
@@ -91,8 +84,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
 
-                # `allauth` needs this from django
-                'django.template.context_processors.request',
+              
             ],
         },
     },
@@ -134,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'ar'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'UTC'
 
@@ -143,9 +135,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
+#  
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -161,43 +151,49 @@ STATICFILES_DIRS = [
 
 # Chiyi3ni Auth
 
-AUTHENTICATION_BACKENDS = [
-    'social_core.backends.google.GoogleOAuth2',
-   # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
-
-ACCOUNT_FORMS = {
-    'add_email': 'allauth.account.forms.AddEmailForm',
-    'change_password': 'allauth.account.forms.ChangePasswordForm',
-    'login': 'allauth.account.forms.LoginForm',
-    'reset_password': 'allauth.account.forms.ResetPasswordForm',
-    'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
-    'set_password': 'allauth.account.forms.SetPasswordForm',
-    'signup': 'allauth.account.forms.SignupForm',
-    'user_token': 'allauth.account.forms.UserTokenForm',
-}
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
 
 
-LOGIN_REDIRECT_URL = '/home'
+# settings.py
+LOGOUT_REDIRECT_URL = 'login'
 
-ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-ACCOUNT_EMAIL_REQUIRED = True
-
-SOCIALACCOUNT_QUERY_EMAIL = True
-
-ACCOUNT_SESSION_REMEMBER = True
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '819319194543-g0seaa390dsea8b9k44dq6m20sdpvhc6.apps.googleusercontent.com'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
+
+
+
+# chiy3ni tool bar
+
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+]
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: True,
+    'JQUERY_URL': '',  # Assurez-vous d'utiliser une version locale de jQuery pour éviter les problèmes de compatibilité
+}
+
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+    # Ajoutez votre adresse IP locale ici
+    '192.168.160.237',  # Exemple d'adresse IP locale
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

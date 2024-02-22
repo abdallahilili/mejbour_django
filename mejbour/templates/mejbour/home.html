@@ -1,27 +1,93 @@
 <!-- objets_perdus/templates/objets_perdus/home.html -->
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Liste des Objets Perdus</h1>
 
-{% block content %}
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Liste des Objets Perdus</h1>
-
-        {% for objet_perdu in objets_perdus %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h2>{{ objet_perdu.nom_utilisateur }}</h2>
-                    <p>{{ objet_perdu.description }}</p>
-                    <p>Date de Signalement: {{ objet_perdu.date_signalement }}</p>
-                    <p>Lieu Trouvé: {{ objet_perdu.lieu_trouve }}</p>
-                    <p>Coordonnées: {{ objet_perdu.coordonnees }}</p>
-                    {% if objet_perdu.image %}
-                        <img src="{{ objet_perdu.image.url }}" alt="{{ objet_perdu.nom }}" class="img-fluid">
-                    {% endif %}
-                    <hr>
-                    <a href="{% url 'objet_detail' objet_perdu_id=objet_perdu.id %}" class="btn btn-primary">Détails</a>
-                    <!-- Bouton pour afficher les détails -->
-                   
-                </div>
-            </div>
-        {% endfor %}
+  {% for objet_perdu in objets_perdus %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h2>{{ objet_perdu.nom_utilisateur }}</h2>
+      <p>{{ objet_perdu.description }}</p>
+      <p>Date de Signalement: {{ objet_perdu.date_signalement }}</p>
+      <p>Lieu Trouvé: {{ objet_perdu.lieu_trouve }}</p>
+      <p>Coordonnées: {{ objet_perdu.coordonnees }}</p>
+      {% if objet_perdu.image %}
+      <img
+        src="{{ objet_perdu.image.url }}"
+        alt="{{ objet_perdu.nom }}"
+        class="img-fluid"
+      />
+      {% endif %}
+      <hr />
+      <a
+        href="{% url 'objet_detail' objet_perdu_id=objet_perdu.id %}"
+        class="btn btn-primary"
+        >Détails</a
+      >
+      <!-- Bouton pour afficher les détails -->
     </div>
+  </div>
+  {% endfor %}
+
+  <!-- Afficher la pagination avec Bootstrap -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      {% if objets_perdus.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1">&laquo;</a>
+      </li>
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ objets_perdus.previous_page_number }}"
+        ></a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">&laquo; </span>
+      </li>
+      <li class="page-item disabled">
+        <span class="page-link"></span>
+      </li>
+      {% endif %}
+
+      <li class="page-item active" aria-current="page">
+    <span class="page-link"> {{ objets_perdus.number }} </span>
+    
+      </li>
+     
+      <li class="page-item">
+        <span class=""> de </span>
+      </li>
+
+      <li class="page-item">
+        <span class="page-link"> {{ objets_perdus.paginator.num_pages }}</span>
+      </li>
+
+      {% if objets_perdus.has_next %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ objets_perdus.next_page_number }}"
+        ></a>
+      </li>
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ objets_perdus.paginator.num_pages }}"
+        >
+          &raquo;</a
+        >
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <span class="page-link"></span>
+      </li>
+      <li class="page-item disabled">
+        <span class="page-link"> &raquo;</span>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
 {% endblock content %}

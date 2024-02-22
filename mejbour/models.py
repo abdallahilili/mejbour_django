@@ -13,6 +13,9 @@ class ObjetPerdu(models.Model):
     coordonnees = models.CharField(max_length=255)
     image = models.ImageField(upload_to='images/objets_perdus/', null=True, blank=True)
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE, null=True)  # Associer l'objet perdu à un utilisateur
+    objet_trouve = models.BooleanField(default=False)  # Nouveau champ pour indiquer si l'objet est trouvé ou non
+
+
 
     def __str__(self):
         return self.nom

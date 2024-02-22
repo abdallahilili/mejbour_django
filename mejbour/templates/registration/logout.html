@@ -1,0 +1,6 @@
+<!-- logout.html -->
+<p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Déconnexion</button>
+</form>

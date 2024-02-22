@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="mt-5">
+        <h1>User Profile</h1>
+        <h2>{{ user.username }}</h2>
+        <p>Email: {{ user.email }}</p>
+
+        <h3>Objets Signalés</h3>
+        {% if objets_signales %}
+            <ul class="list-group">
+                {% for objet in objets_signales %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">{{ objet.nom }}</h5>
+                            {% if objet.objet_trouve %}
+                                <span class="badge bg-success">Trouvé</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Non trouvé</span>
+                            {% endif %}
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-muted">Description:</span> {{ objet.description }}
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-muted">Date de signalement:</span> {{ objet.date_signalement }}
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-muted">Lieu trouvé:</span> {{ objet.lieu_trouve }}
+                        </div>
+                        {% if objet.image %}
+                            <img src="{{ objet.image.url }}" alt="Photo de l'objet" class="img-thumbnail">
+                        {% endif %}
+                        <form method="post" action="{% url 'marquer_objet_trouve' objet.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                {% if objet.objet_trouve %}
+                                    Marquer comme non trouvé
+                                {% else %}
+                                    Marquer comme trouvé
+                                {% endif %}
+                            </button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun objet signalé.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
