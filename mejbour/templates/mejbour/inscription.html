@@ -1,0 +1,32 @@
+{% extends "mejbour/base.html" %} {% block content %}
+<div class="container">
+  <br /><br />
+  {% comment %}
+  <div class="card-header text-badge">{{ 'Inscription'|title }}</div>
+  {% endcomment %}
+  <div class="card-body">
+    <div class="justify-content-between align-items-center">
+      <div class="shadow-wrap">
+        <div class="form-wrap">
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              {{ form.username.label_tag }} {{ form.username }}
+            </div>
+            <div class="mb-3">{{ form.email.label_tag }} {{ form.email }}</div>
+            <div class="mb-3">
+              {{ form.password1.label_tag }} {{ form.password1 }}
+            </div>
+            <div class="mb-3">
+              {{ form.password2.label_tag }} {{ form.password2 }}
+            </div>
+            <button type="submit" class="btn btn-primary text-white">
+              S'inscrire
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}Page Propre{% endblock %}
+
+{% block content %}
+<br><br>
+<div class="container mt-5">
+  <div class="card text-center">
+    <div class="card-header">
+      <a href="/">
+        <img
+          src="{% static 'logo1.png' %}"
+          alt="Votre Logo"
+          width="80"
+          height="40"
+        />
+      </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-borderless">
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="d-flex flex-column">
+                      <span class="text-muted">Email :</span>
+                      <a
+                        class="signup-link text-primary"
+                        href="mailto:abdallahiluli79@gmail.com"
+                        >abdallahiluli79@gmail.com</a
+                      >
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex flex-column">
+                      <span class="text-muted">Tel :</span>
+                      <a
+                        class="signup-link text-primary"
+                        href="tel:+222 31 17 70 08"
+                        >+222 31 17 70 08</a
+                      >
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

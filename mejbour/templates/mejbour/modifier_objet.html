@@ -1,0 +1,107 @@
+<!-- objets_perdus/templates/mejbour/modifier_objet.html -->
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+  <h1 class="mb-4">Modifier un Objet Perdu</h1>
+
+  <form method="post" action="{% url 'modifier_objet' objet.id %}" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+    {% csrf_token %}
+    {% if messages %}
+    <div class="alert alert-dismissible fade show" role="alert">
+      {% for message in messages %}
+      <p class="mb-0">{{ message }}</p>
+      {% endfor %}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endif %}
+    {% if form.errors %}
+    <div class="alert alert-danger">
+      {% for field, errors in form.errors.items %}
+      <strong>{{ field|title }}</strong>: {% for error in errors %} {{ error }}
+      {% endfor %}
+      <br />
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="mb-3">
+      <label for="id_nom_visiteur" class="form-label">Nom du visiteur</label>
+      <input
+        type="text"
+        name="nom_visiteur"
+        id="id_nom_visiteur"
+        class="form-control"
+        value="{{ user.username }}"
+        required
+        readonly
+      />
+    </div>
+    <!-- Autres champs préremplis avec les données de l'objet à modifier -->
+    <div class="mb-3">
+      <label for="id_nom" class="form-label">Nom</label>
+      <input
+        type="text"
+        name="nom"
+        id="id_nom"
+        class="form-control"
+        value="{{ objet.nom }}"
+        required
+      />
+    </div>
+    <div class="mb-3">
+        <label for="id_coordonnees" class="form-label">Coordonnées</label>
+        <input
+          type="text"
+          name="coordonnees"
+          id="id_coordonnees"
+          class="form-control"
+          value="{{ objet.coordonnees }}"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="id_lieu_trouve" class="form-label">Lieu trouvé</label>
+        <input
+          type="text"
+          name="lieu_trouve"
+          id="id_lieu_trouve"
+          class="form-control"
+          value="{{ objet.lieu_trouve }}"
+          required
+        />
+      </div>
+    <div class="mb-3">
+      <label for="id_description" class="form-label">Description</label>
+      <textarea
+        name="description"
+        id="id_description"
+        class="form-control"
+        required
+      >{{ objet.description }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label for="id_image" class="form-label">Image</label>
+        <input
+          type="file"
+          name="image"
+          id="id_image"
+          class="form-control-file"
+          required
+          {% if objet.image %}
+          value="{{ objet.image.url }}"
+          {% endif %}
+          
+        />
+      </div>
+
+    <!-- Ajoutez d'autres champs de formulaire préremplis avec les données de l'objet -->
+    <button type="submit" class="btn btn-primary">Modifier</button>
+  </form>
+</div>
+{% endblock %}

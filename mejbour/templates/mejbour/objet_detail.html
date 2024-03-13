@@ -1,38 +1,59 @@
 <!-- objets_perdus/templates/objets_perdus/objet_detail.html -->
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-lg-8 offset-lg-2">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">{{ objet_perdu.nom }}</h1>
-                    <p class="card-text">{{ objet_perdu.description }}</p>
-                    <p class="card-text"><strong>Date de Signalement:</strong> {{ objet_perdu.date_signalement }}</p>
-                    <p class="card-text"><strong>Lieu Trouvé:</strong> {{ objet_perdu.lieu_trouve }}</p>
-                    <p class="card-text"><strong>Coordonnées:</strong> {{ objet_perdu.coordonnees }}</p>
-                    {% if objet_perdu.image %}
-                        <img src="{{ objet_perdu.image.url }}" alt="{{ objet_perdu.nom }}" class="img-fluid">
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h2 class="card-title">Objet Volé</h2>
-                    {% if objet_perdu.objetvole %}
-                        <p class="card-text">Signalé par: {{ objet_perdu.objetvole.signale_par }}</p>
-                        <p class="card-text">Location: {{ objet_perdu.objetvole.location }}</p>
-                        <p class="card-text"><strong>Date de Signalement:</strong> {{ objet_perdu.objetvole.date_signalement }}</p>
-                    {% else %}
-                        <p class="card-text">Cet objet n'a pas été signalé comme volé.</p>
-                    {% endif %}
-                </div>
-            </div>
+  <div class="row">
+    <div class="col-lg-8 offset-lg-2">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title">{{ objet_perdu.nom }}</h1>
+          <p class="card-text">{{ objet_perdu.description }}</p>
+          <p class="card-text">
+            <strong>Date de Signalement:</strong> {{ objet_perdu.date_signalement }}
+          </p>
+          <p class="card-text">
+            <strong>Lieu Trouvé:</strong> {{ objet_perdu.lieu_trouve }}
+          </p>
+          <p class="card-text">
+            <strong>Coordonnées:</strong> {{ objet_perdu.coordonnees }}
+          </p>
+          {% if objet_perdu.image %}
+          <img
+            src="{{ objet_perdu.image.url }}"
+            alt="{{ objet_perdu.nom }}"
+            class="img-fluid"
+          />
+          
         </div>
+        {% endif %} {% if objet_perdu.objet_trouve %}
+          <span class="badge bg-success txt-18">Trouvé</span>
+          {% else %}
+          <span/span class="badge bg-warning text-dark">Non trouvé</span>
+          {% endif %}
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-body">
+          <h2 class="card-title">Objet Volé</h2>
+          {% if objet_perdu.objetvole %}
+          <p class="card-text">
+            Signalé par: {{ objet_perdu.objetvole.signale_par }}
+          </p>
+          <p class="card-text">
+            Location: {{ objet_perdu.objetvole.location }}
+          </p>
+
+          <p class="card-text">
+            <strong>Date de Signalement:</strong> {{
+            objet_perdu.objetvole.date_signalement }}
+          </p>
+          {% else %}
+          <p class="card-text">Cet objet n'a pas été signalé comme volé.</p>
+          {% endif %}
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 {% endblock %}

@@ -1,45 +1,40 @@
 {% extends "mejbour/base.html" %}
-
 {% block content %}
-<br><br>
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      {% if form.errors %}
-        <div class="alert alert-danger" role="alert">
-          Your username and password didn't match. Please try again.
-        </div>
-      {% endif %}
+<br /><br />
 
-      {% if next %}
-        {% if user.is_authenticated %}
-          <div class="alert alert-warning" role="alert">
-            Your account doesn't have access to this page. To proceed, please login with an account that has access.
-          </div>
-        {% else %}
-          <div class="alert alert-info" role="alert">
-            Please login to see this page.
-          </div>
-        {% endif %}
-      {% endif %}
+{% if form.errors %}
+<div class="alert alert-danger" role="alert">
+  Votre nom d'utilisateur et votre mot de passe ne correspondent pas. Veuillez réessayer.
+</div>
+{% endif %}
+{% if next %}
+{% if user.is_authenticated %}
+<div class="alert alert-warning" role="alert">
+  Votre compte n'a pas accès à cette page. Pour continuer, veuillez vous connecter avec un compte ayant accès.
+</div>
+{% else %}
+<div class="alert alert-info" role="alert">Veuillez vous connecter pour voir cette page.</div>
+{% endif %}
+{% endif %}
 
+<div class="justify-content-between align-items-center">
+  <div class="shadow-wrap">
+    <div class="form-wrap">
       <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="id_username" class="form-label">Username</label>
-          {{ form.username }}
-        </div>
-        <div class="mb-3">
-          <label for="id_password" class="form-label">Password</label>
-          {{ form.password }}
-        </div>
-        <input type="submit" value="Login" class="btn btn-primary">
-        <input type="hidden" name="next" value="{{ next }}">
+        {% csrf_token %} {{form.as_p}}
+        <input type="submit" class="btn btn-primary" value="Connexion"/>
+        <input type="hidden" name="next" value="{{ next }}" />
       </form>
 
+      <!-- Bouton d'inscription -->
+      <p class="mt-3">Vous n'avez pas de compte ? <a href="{% url 'inscription' %}" class="signup-link">Inscrivez-vous</a></p>
+
       {# Assumes you set up the password_reset view in your URLconf #}
-      <p class="mt-3"><a href="{% url 'password_reset' %}" class="btn btn-link">Lost password?</a></p>
+      <p class="mt-3">
+        <a href="{% url 'password_reset' %}" class="signup-link">Mot de passe oublié ?</a>
+      </p>
     </div>
   </div>
 </div>
+
 {% endblock %}

@@ -1,53 +1,99 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="container">
-    <div class="mt-5">
-        <h1>User Profile</h1>
-        <h2>{{ user.username }}</h2>
-        <p>Email: {{ user.email }}</p>
+  <div class="mt-5">
+    <h1>User Profile</h1>
+    <h2>{{ user.username }}</h2>
+    <p>Email: {{ user.email }}</p>
 
-        <h3>Objets Signalés</h3>
-        {% if objets_signales %}
-            <ul class="list-group">
-                {% for objet in objets_signales %}
-                    <li class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">{{ objet.nom }}</h5>
-                            {% if objet.objet_trouve %}
-                                <span class="badge bg-success">Trouvé</span>
-                            {% else %}
-                                <span class="badge bg-warning text-dark">Non trouvé</span>
-                            {% endif %}
-                        </div>
-                        <div class="mb-2">
-                            <span class="text-muted">Description:</span> {{ objet.description }}
-                        </div>
-                        <div class="mb-2">
-                            <span class="text-muted">Date de signalement:</span> {{ objet.date_signalement }}
-                        </div>
-                        <div class="mb-2">
-                            <span class="text-muted">Lieu trouvé:</span> {{ objet.lieu_trouve }}
-                        </div>
-                        {% if objet.image %}
-                            <img src="{{ objet.image.url }}" alt="Photo de l'objet" class="img-thumbnail">
-                        {% endif %}
-                        <form method="post" action="{% url 'marquer_objet_trouve' objet.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                {% if objet.objet_trouve %}
-                                    Marquer comme non trouvé
-                                {% else %}
-                                    Marquer comme trouvé
-                                {% endif %}
-                            </button>
-                        </form>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>Aucun objet signalé.</p>
+    <h3>Objets Signalés</h3>
+    {% if objets_signales %}
+    <ul class="list-group">
+      {% for objet in objets_signales %}
+      <li class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">{{ objet.nom }}</h5>
+          {% if objet.objet_trouve %}
+          <span class="badge bg-success">Trouvé</span>
+          {% else %}
+          <span class="badge bg-warning text-dark">Non trouvé</span>
+          {% endif %}
+        </div>
+        <div class="mb-2">
+          <span class="text-muted">Description:</span> {{ objet.description }}
+        </div>
+        <div class="mb-2">
+          <span class="text-muted">Date de signalement:</span> {{objet.date_signalement }}
+        </div>
+        <div class="mb-2">
+          <span class="text-muted">Lieu trouvé:</span> {{ objet.lieu_trouve }}
+        </div>
+        {% if objet.image %}
+        <img
+          src="{{ objet.image.url }}"
+          alt="Photo de l'objet"
+          class="img-thumbnail"
+        />
         {% endif %}
-    </div>
+        <br />
+        <hr />
+        <form method="post" action="{% url 'marquer_objet_trouve' objet.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary btn-sm">
+            {% if objet.objet_trouve %} Marquer comme non trouvé {% else %}
+            Marquer comme trouvé {% endif %}
+          </button>
+        </form>
+        <!-- Ajouter des boutons pour modifier et supprimer -->
+        <div class="btn-group" role="group" aria-label="Actions">
+            <a href="{% url 'modifier_objet' objet.id %}" class="btn btn-warning btn-sm">Modifier</a>
+            
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <form
+            method="post"
+            action="{% url 'supprimer_objet' objet.id %}"
+            class="d-inline"
+          >
+            {% csrf_token %}
+            <!-- Bouton de suppression -->
+            <button
+              class="btn btn-danger btn-sm"
+              onclick="confirmerSuppression({{ objet.id }})"
+            >
+              Supprimer
+            </button>
+          </form>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>Aucun objet signalé.</p>
+    {% endif %}
+  </div>
 </div>
+
+<!-- user_profile.html -->
+<script>
+  function confirmerSuppression(objetId) {
+      if (confirm("Êtes-vous sûr de vouloir supprimer cet objet ?")) {
+          fetch('{% url 'supprimer_objet' 999 %}'.replace('999', objetId), {
+              method: 'POST',
+              headers: {
+                  'X-CSRFToken': '{{ csrf_token }}',
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+          })
+          .then(response => {
+              if (response.ok) {
+                  location.reload(); // Recharger la page après la suppression
+              } else {
+                  console.error('Erreur lors de la suppression de l\'objet');
+              }
+          })
+          .catch(error => console.error('Erreur lors de la suppression de l\'objet:', error));
+      }
+  }
+</script>
+
 {% endblock %}

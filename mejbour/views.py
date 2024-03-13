@@ -1,12 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 
-from mejbour.form import ObjetPerduForm
+from mejbour.form import CustomUserCreationForm, ObjetPerduForm
 from .models import ObjetPerdu, ObjetVole
 # from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
+
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+
 
 from django.core.paginator import Paginator
 
@@ -25,6 +28,10 @@ def home(request):
     objets_perdus = paginator.get_page(page_number)
 
     return render(request, 'mejbour/home.html', {'objets_perdus': objets_perdus})
+
+def propre(request):
+    return render(request, 'info.html')
+
 def objet_detail(request, objet_perdu_id):
     objet_perdu = get_object_or_404(ObjetPerdu, pk=objet_perdu_id)
     return render(request, 'mejbour/objet_detail.html', {'objet_perdu': objet_perdu})
@@ -53,6 +60,29 @@ def signalement_objet(request):
     
     # Afficher le formulaire dans le template
     return render(request, 'mejbour/signalement_objet.html', {'form': form})
+
+
+
+def modifier_objet(request, objet_id):
+    objet = get_object_or_404(ObjetPerdu, id=objet_id)
+    if request.method == 'POST':
+        form = ObjetPerduForm(request.POST, instance=objet)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile')  # Rediriger vers la page de profil de l'utilisateur
+    else:
+        form = ObjetPerduForm(instance=objet)
+    return render(request, 'modifier_objet.html', {'form': form, 'objet': objet})
+
+
+def supprimer_objet(request, objet_id):
+    objet = get_object_or_404(ObjetPerdu, pk=objet_id)
+    if request.method == 'POST':
+        objet.delete()
+        return JsonResponse({'message': 'L\'objet a été supprimé avec succès'}, status=200)
+    else:
+        return JsonResponse({'message': 'La requête doit être de type POST'}, status=400)
+
 def submit_form_view(request):
     if request.method == 'POST':
         form = ObjetPerduForm(request.POST, request.FILES)
@@ -72,7 +102,7 @@ def user_profile(request):
     user = request.user
     
     # Récupérer les objets signalés par l'utilisateur
-    objet_perdu = ObjetPerdu.objects.filter(utilisateur=user)
+    objet_perdu = ObjetPerdu.objects.filter(utilisateur=user).order_by('-date_signalement')
     
     context = {
         'user': user,
@@ -98,6 +128,71 @@ def marquer_objet_trouve(request, objet_id):
 
 
 
+
+
+class InscriptionView(CreateView):
+    form_class = CustomUserCreationForm 
+    template_name = 'inscription.html'  # Le nom du template d'inscription que vous devez créer
+    success_url = reverse_lazy('login')  # Redirige 
+# ----------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
     #     form = ObjetPerduForm()
     
     # return render(request, 'mejbour/signalement_objet.html', {'form': form})

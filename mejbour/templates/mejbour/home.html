@@ -2,10 +2,30 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container mt-5">
   <h1 class="text-center mb-4">Liste des Objets Perdus</h1>
+  <!-- HTML -->
+  <div id="fixedButtonContainer"></div>
+
+  <div class="" title="Signaler un objet">
+    <a
+      href="{% url 'signalement_objet' %}"
+      class="btn btn-primary"
+      id="signalerObjetBtn"
+    >
+      Signaler un objet
+    </a>
+  </div>
 
   {% for objet_perdu in objets_perdus %}
   <div class="card mb-3">
     <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="mb-0">{{ objet_perdu.nom }}</h5>
+        {% if objet_perdu.objet_trouve %}
+            <span class="badge bg-success">Trouvé</span>
+        {% else %}
+            <span class="badge bg-warning text-dark">Non trouvé</span>
+        {% endif %}
+    </div>
       <h2>{{ objet_perdu.nom_utilisateur }}</h2>
       <p>{{ objet_perdu.description }}</p>
       <p>Date de Signalement: {{ objet_perdu.date_signalement }}</p>
@@ -52,10 +72,9 @@
       {% endif %}
 
       <li class="page-item active" aria-current="page">
-    <span class="page-link"> {{ objets_perdus.number }} </span>
-    
+        <span class="page-link"> {{ objets_perdus.number }} </span>
       </li>
-     
+
       <li class="page-item">
         <span class=""> de </span>
       </li>
@@ -90,4 +109,70 @@
     </ul>
   </nav>
 </div>
+
+{% if user.is_authenticated %}
+<script>
+  var utilisateurConnecte = true;
+</script>
+{% else %}
+<script>
+  var utilisateurConnecte = false;
+</script>
+{% endif %}
+<script>
+    // JavaScript
+    window.addEventListener("scroll", function () {
+      var buttonContainer = document.getElementById("fixedButtonContainer");
+      var scrollButton =
+        '<div class="fixed-button" title="Signaler un objet">' +
+        '<a id="signalerObjetBtn" href="#" class="btn btn-primary btn-circle btn-lg">' +
+        '<i class="material-icons me-0 text-white">add</i>' +
+        "</a>" +
+        "</div>";
+  
+      if (window.scrollY > 0) {
+        buttonContainer.innerHTML = scrollButton;
+  
+        // Ajouter un écouteur d'événement au bouton ajouté dynamiquement
+        var signalerObjetBtn = document.getElementById("signalerObjetBtn");
+        signalerObjetBtn.addEventListener("click", function(e) {
+          e.preventDefault(); // Empêcher le comportement par défaut du lien
+          // Vérifier si l'utilisateur est connecté côté serveur
+          if (utilisateurConnecte) {
+            // Utilisateur connecté, rediriger vers la page de signalement de l'objet
+            window.location.href = "{% url 'signalement_objet' %}";
+          } else {
+            // Par exemple, afficher un message de connexion ou ouvrir une boîte de dialogue de connexion
+            alert("Vous devez vous connecter pour signaler un objet.");
+            // Utilisateur non connecté, rediriger vers la page de connexion
+            window.location.href = "{% url 'login' %}";
+          }
+        });
+      } else {
+        buttonContainer.innerHTML = "";
+      }
+    });
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Écouteur d'événement pour le clic sur le bouton
+    $("#signalerObjetBtn").click(function (e) {
+      e.preventDefault(); // Empêcher le comportement par défaut du lien
+      // Votre logique de demande de connexion ici
+      // Redirection en fonction de l'état de connexion de l'utilisateur
+      if (utilisateurConnecte) {
+        // Utilisateur connecté, rediriger vers la page de signalement de l'objet
+        window.location.href = "{% url 'signalement_objet' %}";
+      } else {
+        // Par exemple, afficher un message de connexion ou ouvrir une boîte de dialogue de connexion
+        alert("Vous devez vous connecter pour signaler un objet.");
+        // Utilisateur non connecté, rediriger vers la page de connexion
+        window.location.href = "{% url 'login' %}";
+      }
+    });
+  });
+</script>
 {% endblock content %}
